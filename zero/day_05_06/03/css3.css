@@ -1,0 +1,41 @@
+body {
+    padding: 0;
+    /* margin: 0; */
+}
+
+h1 {
+    background-color: #848484;
+    color: white;
+    margin: 0;
+    padding: 20px;
+}
+
+section {
+    position: relative;
+    border-bottom: #CCC solid 1px;
+    border-right: #CCC solid 1px;
+}
+
+h2 {
+    /* display: inline-block; */
+    background-color: #CCC;
+    width: 120px;
+    height: 120px;
+    line-height: 120px;
+    margin: 0;
+    border-bottom: white solid 1px;
+    text-align: center;
+    font-size: 16px;
+    
+}
+
+section div {
+    /* display: inline-block; */
+    position: absolute;
+    top: 10px;
+    left: 140px;
+}
+
+strong + br {
+    display: none;
+}
