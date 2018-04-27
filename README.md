@@ -8,7 +8,7 @@ For Baidu IFE 2018
 + [第二天：给自己做一个在线简历吧](zero/day_02/index.html)
 + [第三天：让简历有点色彩](zero/day_03/index.html)
 + [第四天，背景边框列表链接和更复杂的选择器](zero/day_04/index.html)
-+ [第五天和第六天 三种简历](zero/day_05_06/index.md)
++ [第五天和第六天 三种简历](zero/day_05_06/README.md)
     + [简历一](zero/day_05_06/01/index.html)
     + [简历二](zero/day_05_06/02/index.html)
     + [简历三](zero/day_05_06/03/index.html)
