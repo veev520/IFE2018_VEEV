@@ -1,5 +1,14 @@
-# [IFE2018_VEEV](https://veev520.github.io/IFE2018_VEEV/)
+# IFE2018_VEEV
 For Baidu IFE 2018
+
+目录指向的是相对地址, 所以:
+
+若当前是代码仓库, 则下面的目录是指向 **源码**
+
+若当前是预览页面, 则下面的目录是指向 **预览**
+
+当然, 你可以再这里切换 [预览](https://veev520.github.io/IFE2018_VEEV/) or [源码](https://github.com/veev520/IFE2018_VEEV)
+
 
 目录
 
