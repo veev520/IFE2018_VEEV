@@ -21,6 +21,7 @@ For Baidu IFE 2018
     + [简历一](zero/day_05_06/01/index.html)
     + [简历二](zero/day_05_06/02/index.html)
     + [简历三](zero/day_05_06/03/index.html)
++ [第七天到第八天：学习布局](zero/day_07_08/index.html)
 
 MVVM学院
 + [1.1 课程系列引导及准备工作](san/1_1/QuickStart.html)
