@@ -1,0 +1,90 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.content {
+    position: relative;
+    margin-left: calc(50% - 800px);
+    width: 1600px;
+}
+
+header {
+    height: 990px;
+    background: url(../res/header.jpg) center no-repeat;
+    background-size: auto auto;
+}
+
+header h1 {
+    position: relative;
+    top: 210px;
+    margin: 0;
+    color: #FFF;
+    font-weight: normal;
+    font-size: 46px;
+    text-align: center;
+}
+
+header p:first-of-type {
+    position: absolute;
+    top: 300px;
+    left: 420px;
+    width: calc(1185px - 420px);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 19.5px;
+    text-align: center;
+}
+
+header .sign {
+    position: absolute;
+    top: 530px;
+    left: 310px;
+    width: calc(1280px - 310px);
+    height: calc(780px - 530px);
+    border: rgba(255, 255, 255, 0.2) 1px solid;
+}
+
+header .sign h3 {
+    margin-top: 40px;
+    color: #FFF;
+    text-align: center;
+    font-weight: lighter;
+}
+
+header .sign span {
+    display: block;
+    color: rgba(255, 255, 255, 0.3);
+    text-align: center;
+}
+
+header .input {
+    height: 48px;
+    margin-top: 48px;
+    margin-left: 100px;
+}
+header .input input {
+    width: 290px;
+    height: 100%;
+    border: rgba(255, 255, 255, 0.2) 1px solid;
+    text-align: center;
+    color: #FFF;
+    background-color: transparent;
+    box-sizing: border-box;
+}
+
+header .input input:first-child {
+    color: #FFF;
+}
+
+header .input input:nth-child(2) {
+    margin-left: 20px;
+}
+
+header .input button {
+    width: 123px;
+    height: 100%;
+    margin-left: 20px;
+    border: #FFF 1px solid;
+    background-color: #FFF;
+    box-sizing: border-box;
+}
