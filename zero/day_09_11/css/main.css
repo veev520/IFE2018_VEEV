@@ -25,7 +25,7 @@ header h1 {
     text-align: center;
 }
 
-header p:first-of-type {
+header p {
     position: absolute;
     top: 300px;
     left: 420px;
@@ -87,4 +87,32 @@ header .input button {
     border: #FFF 1px solid;
     background-color: #FFF;
     box-sizing: border-box;
+}
+
+
+/*
+ ************************************************************
+ */
+
+.section1 {
+
+}
+
+.section1 ul {
+    list-style-type: none;
+}
+.section1 li {
+    float: left;
+    width: 50%;
+}
+.section1 li .icon  {
+    display: inline-block;
+    width: 30px;
+    height: 49px;
+    background: url(../res/icon_1_1.png) no-repeat center center;
+    background-size: auto auto;
+}
+.section1 li div {
+    display: inline-block;
+    width: 350px
 }
