@@ -4,6 +4,123 @@
         <title>js练习</title>
     </head>
     <body>
-        
+        <section>
+            <h1>进制转换</h1>
+            <input id='dec_number' type="number" placeholder="输入一个十进制非负整数">
+            <button id="trans-btn" onclick="trans()">转化为二进制</button>
+            <p id="result">运算结果</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <h1>进制转换2</h1>
+            <input id="dec-number2" type="number" placeholder="输入一个十进制非负整数">
+            <input id="bin-bit2" type="number" placeholder="输入转化后二进制数字位数">
+            <button id="trans-btn2" onclick="trans2()">转化为二进制</button>
+            <p id="result2">运算结果</p>
+        </section>
+
+        <hr>
+
+        <section>
+            <h1>333</h1>
+            <button id="game3" onclick="game3()">3的小游戏</button>
+        </section>
+
+        <hr>
+
+        <section id="nine">
+            <h1>小九九</h1>
+            <button onclick="nine()">小九九 1</button>
+            <button onclick="nine2()">小九九 2</button>
+            <table id="tabNine" border="1"></table>
+        </section>
+
+        <hr>
+
+        <section>
+            <h1>我的问候</h1>
+            <p id="greetings"></p>
+        </section>
+
+        <script>
+            function trans() {
+                var resultP = document.getElementById('result');
+                var num = document.getElementById('dec_number').value;
+                
+                resultP.innerHTML = '运算结果: ' + parseInt(num).toString(2);
+            }
+
+            function trans2() {
+                var num = document.getElementById('dec-number2').value;
+                var bit = document.getElementById('bin-bit2').value;
+                var resultP = document.getElementById('result2');
+
+                var num2 = parseInt(num).toString(2).length;
+
+                resultP.innerHTML = '运算结果: ' + parseInt(num).toString(2);
+
+                if (num2 != bit) {
+                    console.error('结果不一致');
+                } else {
+                    console.log('结果一致');
+                }
+            }
+
+            function game3() {
+                var i = 0;
+                var outArr = [];
+                while(i++<100) {
+                    if (i %3 == 0 || i.toString().indexOf(3) != -1) {
+                        outArr.push('PA')
+                    } else {
+                        outArr.push(i)
+                    }
+                }
+                console.log(outArr);
+            }
+
+            function nine() {
+                for (var i = 1; i <= 9; i++) {
+                    var s = '';
+                    for (var j = 1; j <= i; j++) {
+                        s = s + j + ' * ' + i + ' = ' + i * j + '\t';
+                    }
+                    console.log(s);
+                }
+            }
+
+            function nine2() {
+                var tab = document.getElementById('tabNine');
+                var str = '';
+                for (var i = 1; i <= 9; i++) {
+                    var s = '<tr>';
+                    for (var j = 1; j <= i; j++) {
+                        s = s +'<td>'  + j + ' * ' + i + ' = ' + i * j + '</td>';
+                    }
+                    s = s + '</tr>';
+                    str = str + s;
+                    console.log(s);
+                }
+                tab.innerHTML = str;
+            }
+
+            function greetings() {
+                var nameArr = ['半夜','凌晨','黎明','清晨','早上','上午','中午','午后','下午','傍晚','晚上','深夜'];
+                var p = document.getElementById('greetings');
+                var date = new Date();
+                var hour = date.getHours();
+
+                var timeName = nameArr[parseInt((hour + 1) / 2)];
+
+                p.innerHTML = hour + '点是' + timeName + ', 所以问候语是<h3>' + timeName + '好</h3>';
+            }
+
+            
+            
+
+            greetings();
+        </script>
     </body>
 </html>
