@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>简历</title>
+    </head>
+    <body>
+        <h1>简历</h1>
+        <div>
+            <section>
+                <h2>基本信息</h2>
+                <div id="info">
+                    <strong>姓名</strong>
+                    <span>&nbsp;大好人</span>
+                    <strong>&nbsp;&nbsp;性别</strong>
+                    <span>&nbsp;男</span>
+                    <strong>&nbsp;&nbsp;应聘职位</strong>
+                    <span>&nbsp;Web前端工程师</span>
+                </div>
+            </section>
+            <section>
+                <h2>联系方式</h2>
+                <div>
+                    <strong>手机</strong>
+                    <span>&nbsp;12345678900</span>
+                    <strong>&nbsp;&nbsp;Email</strong>
+                    <a href="mailto:dahaoren@baidu.com?subject=Say_Hi">dahaoren@baidu.com</a>
+                    <strong>&nbsp;个人主页</strong>
+                    <a href="https://github.com/veev520/IFE2018_VEEV">Github</a>
+                </div>
+            </section>
+            <section>
+                <h2>能力描述</h2>
+                <div>
+                    <strong>技术能力</strong>
+                    <br>
+                    <span>熟练掌握HTML,CSS,JavaScript的拼写</span>
+                    <br><br>
+                    <strong>综合能力</strong>
+                    <br>
+                    <span>良好的沟通, 主动积极, 努力勤奋</span>
+                </div>
+            </section>
+            <section>
+                <h2>教育经历</h2>
+                <div>
+                    <strong>本科</strong>
+                    <br>
+                    <spanp>百度前端技术学院小薇学院</span>
+                </div>
+            </section>
+            <section>
+                <h2>项目经历</h2>
+                <div>
+                    <strong>零基础学院</strong>
+                    <br>
+                    <span>编写简历</span>
+                </div>
+            </section>
+        </div>
+        
+        <button id="btnHello">Hello</button>
+        <button id="btnInfo">个人信息</button>
+        <button id="btnOther">另一个按钮</button>
+        <script>
+            document.getElementById('btnHello').onclick = function() {
+                alert('Hello world')
+            }
+            document.getElementById('btnInfo').onclick = function() {
+                console.log(document.getElementById('info').innerHTML);
+            }
+            document.getElementById('btnOther').onclick = function() {
+                console.log('nothing to do');
+            }
+        </script>
+    </body>
+</html>
