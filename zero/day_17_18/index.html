@@ -97,13 +97,29 @@
                 for (var i = 1; i <= 9; i++) {
                     var s = '<tr>';
                     for (var j = 1; j <= i; j++) {
-                        s = s +'<td>'  + j + ' * ' + i + ' = ' + i * j + '</td>';
+                        s = s +'<td>'  + toChinese(j) + toChinese(i) + (i * j < 10 ? '得' : '') +toChinese( i * j) + '</td>';
                     }
                     s = s + '</tr>';
                     str = str + s;
                     console.log(s);
                 }
                 tab.innerHTML = str;
+            }
+
+            var chineseArr = ['得', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+            function toChinese(num) {
+                if (num < 10) {
+                    return chineseArr[num];
+                } else {
+                    var ten = parseInt(num / 10);
+                    var ind = num % 10;
+                    var str = chineseArr[ten] + chineseArr[10];
+                    if (ind == 0) {
+                        return str;
+                    } else {
+                        return str + chineseArr[ind];
+                    }
+                }
             }
 
             function greetings() {
