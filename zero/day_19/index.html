@@ -67,7 +67,7 @@
         var eles = document.getElementById(sectionId).querySelectorAll('.active')
         var hrefList = [];
         for (var i = 0; i < eles.length; i++) {
-            hrefList.push(eles[i]['href'])
+            hrefList.push(eles[i].innerHTML)
         }
         return hrefList;
     }
