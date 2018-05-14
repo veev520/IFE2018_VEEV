@@ -27,6 +27,7 @@ For Baidu IFE 2018
 + [第十六天，开始感受JS的乐趣](zero/day_16/index.html)
 + [第十七天到第十八天，“如果”可以“重来”](zero/day_17_18/index.html)
 + [第十九天：找到那个DOM](zero/day_19/index.html)
++ [第二十到第二十一天：让你和页面对话](zero/day_20_21/index.html)
 
 MVVM学院
 + [1.1 课程系列引导及准备工作](san/1_1/QuickStart.html)

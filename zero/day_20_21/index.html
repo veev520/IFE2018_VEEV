@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>IFE ECMAScript</title>
+    <style>
+        select {
+            display: none;
+        }
+
+        .palette {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .palette li {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #000;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <h1>动画</h1>
+        <div id="smile" style="width:300px;height:300px;background:#000"></div>
+        <p>不忍直视, 太魔性了</p>
+    </section>
+
+    <section>
+        <h1>事件</h1>
+        <input id="name1" type="text">
+        <button id="submit-btn">Submit</button>
+    </section>
+
+    <section>
+        <h1>样式</h1>
+        <label>
+            <input id="school" name="status" type="radio"> School
+        </label>
+        <label>
+            <input id="company" name="status" type="radio"> Company
+        </label>
+
+        <select id="school-select">
+            <option>北京邮电大学</option>
+            <option>黑龙江大学</option>
+            <option>华中科技大学</option>
+        </select>
+
+        <select id="company-select">
+            <option>百度</option>
+            <option>爱奇艺</option>
+        </select>
+    </section>
+
+    <section>
+        <h1>属性</h1>
+        <ul class="palette">
+            <li style="background-color:crimson"></li>
+            <li style="background-color:bisque"></li>
+            <li style="background-color:blueviolet"></li>
+            <li style="background-color:coral"></li>
+            <li style="background-color:chartreuse"></li>
+            <li style="background-color:darkolivegreen"></li>
+            <li style="background-color:cyan"></li>
+            <li style="background-color:#194738"></li>
+        </ul>
+
+        <p class="color-picker"></p>
+    </section>
+
+
+    <section>
+        <h1>定时器</h1>
+        <div id="fade-obj" style="width:300px;height:300px;background:#000"></div>
+        <button id="fade-btn">淡出</button>
+    </section>
+
+    <script>
+        /******************************
+         *			事件
+         ******************************/
+        var input1 = document.getElementById('name1');
+
+        function printName() {
+            console.log(input1.value);
+        }
+        document.getElementById('submit-btn').onclick = printName;
+        input1.onkeydown = function (key) {
+            // console.log(key);
+            var code = key.code;
+            if (code === 'Enter') {
+                printName();
+            } else if (code === 'Escape') {
+                input1.value = '';
+            }
+        }
+
+
+        document.getElementById('school').onchange = function (s) {
+            document.getElementById('school-select').style.display = 'inline-block'
+            document.getElementById('company-select').style.display = 'none'
+        }
+        document.getElementById('company').onchange = function (s) {
+            document.getElementById('company-select').style.display = 'inline-block'
+            document.getElementById('school-select').style.display = 'none'
+        }
+
+
+        var list = document.querySelectorAll("li");
+        for (var i = i = 0, len = list.length; i < len; i++) {
+            list[i].onclick = function (e) {
+                var t = e.target;
+                var c = t.style.backgroundColor;
+                var p = document.getElementsByClassName("color-picker")[0]
+                p.innerHTML = c;
+                p.style.color = c;
+
+            }
+        }
+
+
+        var fadeObj = document.getElementById('fade-obj');
+        var fadeBtn = document.getElementById('fade-btn');
+        fadeBtn.onclick = function () {
+            fadeBtn.disabled = true;
+            var opacity = fadeObj.style.opacity || 1;
+            if (opacity >= 1) {
+                fadeOut();
+            } else {
+                fadeIn();
+            }
+        }
+
+        function fadeOut() {
+            var opacity = fadeObj.style.opacity || 1;
+            if (opacity > 0) {
+                opacity -= 0.01;
+                fadeObj.style.opacity = opacity;
+                setTimeout(fadeOut, 10);
+            } else {
+                fadeBtn.disabled = false;
+                fadeBtn.innerText = '淡入';
+            }
+        }
+
+        function fadeIn() {
+            var interval = setInterval(function () {
+                // 注意, 这里拿到的 opacity 是 string 类型, 需要转成 float 再执行 加操作
+                var opacity = fadeObj.style.opacity || 1;
+                if (opacity < 1) {
+                    opacity = parseFloat(opacity) + 0.01;
+                    fadeObj.style.opacity = opacity;
+                } else {
+                    fadeBtn.disabled = false;
+                    fadeBtn.innerText = '淡出';
+                    clearInterval(interval);
+                }
+            }, 10);
+        }
+
+        function smile() {
+            var smileDiv = document.getElementById('smile');
+            var i = 0;
+
+            setInterval(function () {
+                if (i++ >= 16) {
+                    i = 0;
+                }
+                var transY = i * 300 + 'px';
+
+                smileDiv.style.backgroundImage = 'url(smile.jpg)';
+                // smileDiv.style.backgroundClip = 'rect(0px 0px 480px 480px)';
+                smileDiv.style.backgroundPosition = '0px -' + transY;
+                smileDiv.style.backgroundRepeat = 'no-repeat';
+                smileDiv.style.backgroundSize = '300px auto';
+            }, 100);
+        }
+        smile();
+    </script>
+</body>
+
+</html>
