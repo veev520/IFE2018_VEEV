@@ -166,13 +166,13 @@
 
         function smile() {
             var smileDiv = document.getElementById('smile');
-            var i = 0;
+            var i = -16;
 
             setInterval(function () {
                 if (i++ >= 16) {
-                    i = 0;
+                    i = -16;
                 }
-                var transY = i * 300 + 'px';
+                var transY = (i > 0 ? i : 0-i) * 300 + 'px';
 
                 smileDiv.style.backgroundImage = 'url(smile.jpg)';
                 // smileDiv.style.backgroundClip = 'rect(0px 0px 480px 480px)';
