@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>IFE ECMAScript</title>
+    <style>
+    </style>
+</head>
+
+<body>
+    <section id="sec-num">
+        <h1>数字</h1>
+        <div>
+            <label>Number A:
+                <input id="radio-a" type="radio" name="math-obj" value="a">
+            </label>
+            <input id="num-a" type="text">
+            <label>Number B:
+                <input id="radio-b" type="radio" name="math-obj" value="b">
+            </label>
+            <input id="num-b" type="text">
+        </div>
+        <div>
+            <button onclick="showResultNum(getChekcedValue() == null ? '未选中' : isNum(getChekcedValue()) ? '是数字' : '不是数字')">判断当前选中的输入框输入内容是否为数字</button>
+            <button onclick="numClick1()">把 A 四舍五入为 B 个小数位数的数字</button>
+            <button onclick="numClick2()">当前选中数字的绝对值</button>
+            <button onclick="numClick3()">对当前选中的数字进行上舍入</button>
+            <button onclick="numClick4()">对当前选中的数字进行下舍入</button>
+            <button onclick="numClick5()">把当前选中的数字四舍五入为最接近的整数</button>
+            <button onclick="numClick6()">返回 A 和 B 中的最高值</button>
+            <button onclick="numClick7()">返回 A 和 B 中的最低值</button>
+        </div>
+        <p id="result-num"></p>
+    </section>
+
+    <section>
+        <h1>字符串</h1>
+        <div>
+            <label>String A:
+                <input id="str-radio-a" type="radio" checked="true" name="str-obj" value="a">
+            </label>
+            <textarea id="str-a"></textarea>
+            <label>String B:
+                <input id="str-radio-b" type="radio" name="str-obj" value="b">
+            </label>
+            <textarea id="str-b"></textarea>
+            <label>Num A：
+                <input id="str-num-a" type="number" value="0">
+            </label>
+            <label>Num B：
+                <input id="str-num-b" type="number" value="1">
+            </label>
+        </div>
+        <div>
+            <button onclick="strClick1()">获取当前选中输入的内容长度</button>
+            <button onclick="strClick2()">当前选中输入中的第3个字符</button>
+            <button onclick="strClick3()">把两个输入框的文字连接在一起输出（concat）</button>
+            <button onclick="strClick4()">输入B中的内容，在输入A的内容中第一次出现的位置（indexOf）</button>
+            <button onclick="strClick5()">输入A中的内容，在输入B的内容中最后一次出现的位置（lastIndexOf）</button>
+            <button onclick="strClick6()">使用slice获取选中输入框内容的部分内容，参数为num-a及num-b</button>
+            <button onclick="strClick7()">当前选中输入框的行数</button>
+            <button onclick="strClick8()">使用substr获取选中输入框内容的子字符串，参数为num-a及num-b</button>
+            <button onclick="strClick9()">把所选输入框中的内容全部转为大写</button>
+            <button onclick="strClickA()">把所选输入框中的内容全部转为小写</button>
+            <button onclick="strClickB()">把所选输入框中内容的半角空格全部去除</button>
+            <button onclick="strClickC()">把所选输入框中内容的a全部替换成另外一个输入框中的内容</button>
+        </div>
+        <p id="result-str"></p>
+    </section>
+
+    <script>
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //                                              3.字符串2
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        /*
+         实现一个字符串头尾去除空格的函数
+         注意需要去除的空格，包括全角、半角空格
+         暂时不需要学习和使用正则表达式的方式
+         */
+        function diyTrim(str) {
+            var result = "";
+            var s = 0, e = str.length - 1;
+            for (i in str) {
+                if (str[i] != ' ' || str[i] != '　') {
+                    s = i + 1;
+                    break;
+                }
+            }
+
+            result = str.slice(0, e);
+            return result
+        }
+
+        // 测试用例
+        console.log(diyTrim(' a f b    ')); // ->a f b
+        console.log(diyTrim('    ffdaf    ')); // ->ffdaf
+        console.log(diyTrim('1    ')); // ->1
+        console.log(diyTrim('　　f')); // ->f
+        console.log(diyTrim('  　  a f b 　　 ')); // ->a f b
+        console.log(diyTrim(' ')); // ->
+        console.log(diyTrim('　')); // ->
+        console.log(diyTrim('')); // ->
+
+        /*
+         去掉字符串str中，连续重复的地方
+         */
+        function removeRepetition(str) {
+            var result = "";
+
+            // do something
+
+            return result;
+        }
+
+        // 测试用例
+        console.log(removeRepetition("aaa")); // ->a
+        console.log(removeRepetition("abbba")); // ->aba
+        console.log(removeRepetition("aabbaabb")); // ->abab
+        console.log(removeRepetition("")); // ->
+        console.log(removeRepetition("abc")); // ->abc
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //                                              2.字符串
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        function getCheckedInputStr() {
+            var c = document.querySelector('[name=str-obj]:checked');
+            return c == null ? null : c['value'];
+        }
+
+        function getChekcedValueStr() {
+            var c = getCheckedInputStr();
+            return c == null ? null : c == 'a' ? getValueAStr() : getValueBStr();
+        }
+
+        function getValueAStr() {
+            return document.getElementById('str-a').value;
+        }
+
+        function getValueBStr() {
+            return document.getElementById('str-b').value;
+        }
+        // 不管异常处理了, 赋默认值
+        function getValueAStrNum() {
+            return document.getElementById('str-num-a').value || 0;
+        }
+        // 不管异常处理了, 赋默认值
+        function getValueBStrNum() {
+            return document.getElementById('str-num-b').value || 1;
+        }
+
+        // 获取当前选中输入的内容长度
+        function strClick1() {
+            showResultStr(getChekcedValueStr().length);
+        }
+        // 当前选中输入中的第3个字符
+        function strClick2() {
+            if (getChekcedValueStr().length >= 3) {
+                showResultStr(getChekcedValueStr().substr(2, 1));
+            } else {
+                console.error('长度不足3位');
+            }
+        }
+        // 把两个输入框的文字连接在一起输出（concat）
+        function strClick3() {
+            showResultStr(getValueAStr().concat(getValueBStr()));
+        }
+        // 输入B中的内容，在输入A的内容中第一次出现的位置（indexOf）
+        function strClick4() {
+            showResultStr(getValueAStr().indexOf(getValueBStr()));
+        }
+        // 输入A中的内容，在输入B的内容中最后一次出现的位置（lastIndexOf）
+        function strClick5() {
+            showResultStr(getValueAStr().lastIndexOf(getValueBStr()));
+        }
+        // 使用slice获取选中输入框内容的部分内容，参数为num-a及num-b
+        function strClick6() {
+            showResultStr(getChekcedValueStr().slice(getValueAStrNum(), getValueBStrNum()));
+        }
+        // 当前选中输入框的行数
+        function strClick7() {
+            showResultStr(getChekcedValueStr().split('\n').length);
+        }
+        // 使用substr获取选中输入框内容的子字符串，参数为num-a及num-b
+        function strClick8() {
+            showResultStr(getChekcedValueStr().substr(getValueAStrNum(), getValueBStrNum()));
+        }
+        // 把所选输入框中的内容全部转为大写
+        function strClick9() {
+            showResultStr(getChekcedValueStr().toUpperCase());
+        }
+        // 把所选输入框中的内容全部转为小写
+        function strClickA() {
+            showResultStr(getChekcedValueStr().toLowerCase());
+        }
+        // 把所选输入框中内容的半角空格全部去除
+        function strClickB() {
+            showResultStr(getChekcedValueStr().replace(/ /g, ''));
+        }
+        // 把所选输入框中内容的a全部替换成另外一个输入框中的内容
+        function strClickC() {
+            var other = getCheckedInputStr() == 'a' ? getValueBStr() : getValueAStr();
+            showResultStr(getChekcedValueStr().replace(/a/g, other));
+        }
+
+        function showResultStr(msg) {
+            document.getElementById('result-str').innerText = msg;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //                                          1.数字
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        function getCheckedInput() {
+            var c = document.querySelector('[name=math-obj]:checked');
+            return c == null ? null : c['value'];
+        }
+
+        function getChekcedValue() {
+            var c = getCheckedInput();
+            return c == null ? null : c == 'a' ? getValueA() : getValueB();
+        }
+
+        function getValueA() {
+            return document.getElementById('num-a').value;
+        }
+
+        function getValueB() {
+            return document.getElementById('num-b').value;
+        }
+
+        function isNum(n) {
+            return n == '' ? false : !isNaN((n - 0));
+        }
+
+        function checkNum(r) {
+            r = r || '';
+            if (r == 'a') {
+                if (!isNum(getValueA())) {
+                    console.error('输入有误');
+                    return false;
+                }
+            } else if (r == 'b') {
+                if (!isNum(getValueB())) {
+                    console.error('输入有误');
+                    return false;
+                }
+            } else {
+                if (!isNum(getValueA()) || !isNum(getValueB())) {
+                    console.error('输入有误');
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function showResultNum(msg) {
+            document.getElementById('result-num').innerText = msg;
+        }
+        // 把 A 四舍五入为 B 个小数位数的数字
+        function numClick1() {
+            // 没看懂题意
+        }
+
+        // 当前选中数字的绝对值
+        function numClick2() {
+            var t = getCheckedInput();
+            if (t == null) {
+                console.error('未输入');
+            } else {
+                if (checkNum(t)) {
+                    showResultNum(Math.abs(getChekcedValue()))
+                }
+            }
+        }
+
+        // 对当前选中的数字进行上舍入
+        function numClick3() {
+            var t = getCheckedInput();
+            if (t == null) {
+                console.error('未输入');
+            } else {
+                if (checkNum(t)) {
+                    showResultNum(Math.ceil(getChekcedValue()))
+                }
+            }
+        }
+
+        // 对当前选中的数字进行下舍入
+        function numClick4() {
+            var t = getCheckedInput();
+            if (t == null) {
+                console.error('未输入');
+            } else {
+                if (checkNum(t)) {
+                    showResultNum(Math.floor(getChekcedValue()))
+                }
+            }
+        }
+
+        // 把当前选中的数字四舍五入为最接近的整数
+        function numClick5() {
+            var t = getCheckedInput();
+            if (t == null) {
+                console.error('未输入');
+            } else {
+                if (checkNum(t)) {
+                    showResultNum(Math.round(getChekcedValue()))
+                }
+            }
+        }
+
+        // 返回 A 和 B 中的最高值
+        function numClick6() {
+            if (checkNum()) {
+                showResultNum(Math.max(getValueA(), getValueB()))
+            }
+        }
+
+        // 返回 A 和 B 中的最低值
+        function numClick7() {
+            if (checkNum()) {
+                showResultNum(Math.min(getValueA(), getValueB()))
+            }
+        }
+    </script>
+</body>
+
+</html>
