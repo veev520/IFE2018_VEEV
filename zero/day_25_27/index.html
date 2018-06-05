@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>IFE ECMAScript</title>
+</head>
+
+<body>
+    <select id="year-select" onchange="selectYear()">
+        <!-- <option value="2000">2000</option> -->
+    </select>
+
+    <select id="month-select" onchange="selectMonth()">
+        <!-- <option value="1">1</option> -->
+    </select>
+
+    <select id="day-select" onchange="selectDay()">
+        <!-- <option value="1">1</option> -->
+    </select>
+
+    <select id="hour-select" onchange="selectHour()">
+        <!-- <option value="0">00</option> -->
+    </select>
+
+    <select id="minute-select" onchange="selectMinute()">
+        <!-- <option value="0">0</option> -->
+    </select>
+
+    <select id="second-select" onchange="selectSecond()">
+        <!-- <option value="0">0</option> -->
+    </select>
+
+    <p id="result-wrapper">现在距离 2001年1月1日星期X HH:MM:SS 还有 X 天 X 小时 X 分 X 秒</p>
+
+    <script>
+        var yearSelect = document.getElementById('year-select');
+        var monthSelect = document.getElementById('month-select');
+        var daySelect = document.getElementById('day-select');
+        var hourSelect = document.getElementById('hour-select');
+        var minuteSelect = document.getElementById('minute-select');
+        var secondSelect = document.getElementById('second-select');
+        var resultWrapper = document.getElementById('result-wrapper');
+
+        var mYear = 2000,
+            mMonth = 1,
+            mDay = 1,
+            mHour = 0,
+            mMin = 0,
+            mSec = 0;
+
+        // 填充数据
+        function fillData() {
+            for (var i = 2000; i <= 2032; i++) {
+                var option = document.createElement('option')
+                option.value = i;
+                option.innerText = i;
+                yearSelect.appendChild(option)
+            }
+            for (var i = 1; i <= 12; i++) {
+                var option = document.createElement('option')
+                option.value = i;
+                option.innerText = i;
+                monthSelect.appendChild(option)
+            }
+            for (var i = 0; i <= 23; i++) {
+                var option = document.createElement('option')
+                option.value = i;
+                option.innerText = i < 10 ? ('0' + i) : i;
+                hourSelect.appendChild(option)
+            }
+            for (var i = 0; i <= 59; i++) {
+                var option = document.createElement('option')
+                option.value = i;
+                option.innerText = i < 10 ? ('0' + i) : i;
+                minuteSelect.appendChild(option)
+            }
+            for (var i = 0; i <= 59; i++) {
+                var option = document.createElement('option')
+                option.value = i;
+                option.innerText = i < 10 ? ('0' + i) : i;
+                secondSelect.appendChild(option)
+            }
+        }
+
+        function fillDay() {
+            var maxDay = new Date(mYear, mMonth, 0).getDate();
+            if (mDay > maxDay) {
+                mDay = maxDay;
+            }
+            daySelect.innerHTML = ''
+            for (var i = 1; i <= maxDay; i++) {
+                var option = document.createElement('option')
+                option.value = i;
+                option.innerText = i;
+                if (mDay == i) {
+                    option.selected = true;
+                }
+                daySelect.appendChild(option)
+            }
+        }
+        fillData();
+        fillDay();
+
+        Date.prototype.Format = function (fmt) {
+            var week = ['日', '一', '二', '三' ,'四', '五', '六']
+            var o = {
+                "M+": this.getMonth() + 1, //月份 
+                "d+": this.getDate(), //日 
+                "w+": week[this.getDay()], //星期 
+                "h+": this.getHours(), //小时 
+                "m+": this.getMinutes(), //分 
+                "s+": this.getSeconds(), //秒 
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+                "S": this.getMilliseconds() //毫秒 
+            };
+            if (/(y+)/.test(fmt))
+                fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt))
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k])
+                        .length)));
+            return fmt;
+        }
+
+        // 更新数据
+        function updateData() {
+            // 所选时间 注意 月份要 +1
+            var selectDate = new Date(mYear, mMonth - 1, mDay, mHour, mMin, mSec);
+            // 当前时间
+            var now = new Date()
+            // 已经过去?
+            var isGone = selectDate < now;
+            // 时间差的绝对值
+            var delta = Math.abs(selectDate - now);
+
+            var str = '现在距离 ' 
+                        + selectDate.Format('yyyy年MM月dd日星期w hh:mm:ss') 
+                        + (isGone ? ' 已经过去 ' : ' 还有 ')
+                        + ~~(delta / 1000 / 60 / 60 / 24) + '天 '
+                        + ~~(delta / 1000 / 60 / 60 % 24) + '时 '
+                        + ~~(delta / 1000 / 60 % 60) + '分 '
+                        + ~~(delta / 1000 % 60) + '秒';
+            resultWrapper.innerText = str;
+            // 现在距离 2001年1月1日星期X HH:MM:SS 还有 X 天 X 小时 X 分 X 秒
+        }
+
+        updateData();
+        setInterval(function () {
+            updateData();
+        }, 500);
+
+        function selectYear() {
+            var index = yearSelect.selectedIndex;
+            mYear = yearSelect.options[index].value;
+            fillDay();
+        }
+
+        function selectMonth() {
+            var index = monthSelect.selectedIndex;
+            mMonth = monthSelect.options[index].value;
+            fillDay();
+        }
+
+        function selectDay() {
+            var index = daySelect.selectedIndex;
+            mDay = daySelect.options[index].value;
+        }
+
+        function selectHour() {
+            var index = hourSelect.selectedIndex;
+            mHour = hourSelect.options[index].value;
+        }
+
+        function selectMinute() {
+            var index = minuteSelect.selectedIndex;
+            mMin = minuteSelect.options[index].value;
+        }
+
+        function selectSecond() {
+            var index = secondSelect.selectedIndex;
+            mSec = secondSelect.options[index].value;
+        }
+    </script>
+</body>
+
+</html>

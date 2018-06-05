@@ -29,3 +29,4 @@ For Baidu IFE 2018
 + [第十九天：找到那个DOM](zero/day_19/index.html)
 + [第二十到第二十一天：让你和页面对话](zero/day_20_21/index.html)
 + [第二十二天到第二十四天：JavaScript里面的居民们](zero/day_22_24/index.html)
++ [第二十五天到第二十七天 倒数开始 滴答滴 滴答滴](zero/day_25_27/index.html)
