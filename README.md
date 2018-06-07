@@ -31,3 +31,4 @@ For Baidu IFE 2018
 + [第二十二天到第二十四天：JavaScript里面的居民们](zero/day_22_24/index.html)
 + [第二十五天到第二十七天 倒数开始 滴答滴 滴答滴](zero/day_25_27/index.html)
 + [第二十八天到第三十天 给爱的人发个邮件吧](zero/day_28_30/index.html)
++ [第三十一到第三十三天：我是精明的小卖家（一）](zero/day_31_33/index.html)
