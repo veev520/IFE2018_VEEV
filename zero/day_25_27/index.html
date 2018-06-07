@@ -2,153 +2,184 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="UTF-8">
     <title>IFE ECMAScript</title>
-    <style>
-        .wrapper {
-            width: 200px;
-        }
-        .wrapper input, .email-sug {
-            width: 100%;
-        }
-        .email-sug {
-            padding-left: 0;
-        }
-    </style>
 </head>
 
 <body>
-    <div class="wrapper">
-        <input id="email-input" type="text" oninput="inputChangedListener()">
-        <ul id="email-sug-wrapper" class="email-sug"></ul>
-    </div>
+    <select id="year-select" onchange="selectYear()">
+        <!-- <option value="2000">2000</option> -->
+    </select>
+
+    <select id="month-select" onchange="selectMonth()">
+        <!-- <option value="1">1</option> -->
+    </select>
+
+    <select id="day-select" onchange="selectDay()">
+        <!-- <option value="1">1</option> -->
+    </select>
+
+    <select id="hour-select" onchange="selectHour()">
+        <!-- <option value="0">00</option> -->
+    </select>
+
+    <select id="minute-select" onchange="selectMinute()">
+        <!-- <option value="0">0</option> -->
+    </select>
+
+    <select id="second-select" onchange="selectSecond()">
+        <!-- <option value="0">0</option> -->
+    </select>
+
+    <p id="result-wrapper">现在距离 2001年1月1日星期X HH:MM:SS 还有 X 天 X 小时 X 分 X 秒</p>
+
     <script>
-        // 邮箱后缀List参考
-        var postfixList = ['163.com', 'gmail.com', '126.com', 'qq.com', '263.net'];
+        var yearSelect = document.getElementById('year-select');
+        var monthSelect = document.getElementById('month-select');
+        var daySelect = document.getElementById('day-select');
+        var hourSelect = document.getElementById('hour-select');
+        var minuteSelect = document.getElementById('minute-select');
+        var secondSelect = document.getElementById('second-select');
+        var resultWrapper = document.getElementById('result-wrapper');
 
-        var input = document.getElementById('email-input');
-        var tips = document.getElementById('email-sug-wrapper');
+        var mYear = 2000,
+            mMonth = 1,
+            mDay = 1,
+            mHour = 0,
+            mMin = 0,
+            mSec = 0;
 
-        tips.addEventListener('click', function(e) {
-            if (e.target && e.target.nodeName.toUpperCase()=="LI") {
-                console.log(e.target.innerHTML);
+        // 填充数据
+        function fillData() {
+            for (var i = 2000; i <= 2032; i++) {
+                var option = document.createElement('option')
+                option.value = i;
+                option.innerText = i;
+                yearSelect.appendChild(option)
             }
-        });
+            for (var i = 1; i <= 12; i++) {
+                var option = document.createElement('option')
+                option.value = i;
+                option.innerText = i;
+                monthSelect.appendChild(option)
+            }
+            for (var i = 0; i <= 23; i++) {
+                var option = document.createElement('option')
+                option.value = i;
+                option.innerText = i < 10 ? ('0' + i) : i;
+                hourSelect.appendChild(option)
+            }
+            for (var i = 0; i <= 59; i++) {
+                var option = document.createElement('option')
+                option.value = i;
+                option.innerText = i < 10 ? ('0' + i) : i;
+                minuteSelect.appendChild(option)
+            }
+            for (var i = 0; i <= 59; i++) {
+                var option = document.createElement('option')
+                option.value = i;
+                option.innerText = i < 10 ? ('0' + i) : i;
+                secondSelect.appendChild(option)
+            }
+        }
 
-        tips.addEventListener('mouseover', function(e) {
-            if (e.target && e.target.nodeName.toUpperCase()=="LI") {
-                var a = document.getElementsByTagName('li');
-                for (i in a) {
-                    // a[i].style.background = 'transparent';
+        function fillDay() {
+            var maxDay = new Date(mYear, mMonth, 0).getDate();
+            if (mDay > maxDay) {
+                mDay = maxDay;
+            }
+            daySelect.innerHTML = ''
+            for (var i = 1; i <= maxDay; i++) {
+                var option = document.createElement('option')
+                option.value = i;
+                option.innerText = i;
+                if (mDay == i) {
+                    option.selected = true;
                 }
-                e.target.style.background = '#f00';
-            }
-        })
-
-        function inputChangedListener(e) {
-            // 获取用户输入，生成提示框中的提示内容，将提示内容添加到email-sug-wrapper中
-            // 控制email-sug-wrapper的显示/隐藏状态
-            updateTips();
-        }
-
-        // 获取用户输入
-        function getInput() {
-            // 拿到input输入框的输入内容trim后返回 
-            var s = input.value;
-            if(!s) return "";
-            s = s.replace(/&/g,"&amp;");
-            s = s.replace(/</g,"&lt;");
-            s = s.replace(/>/g,"&gt;");
-            s = s.replace(/ /g," ");
-            s = s.replace(/'/g,"\'");
-            s = s.replace(/"/g,"&quot;");
-            return s;
-        }
-
-        // 生成提示框中的提示内容
-        function getTipsList() {
-            // 获取用户输入
-            // 遍历postfixList {
-            //     把用户输入和每一个postfix进行结合成为每一个Li
-            // }
-            // 返回生成的提示内容
-            var list = [];
-            var value = getInput();
-            var atIndex = value.indexOf('@');
-            var dotIndex = value.lastIndexOf('.');
-            var siteName;
-            var userName = value;
-            if (atIndex >= 0) {
-                if (dotIndex >= 0 && atIndex < dotIndex) {
-                    // siteName = value.substring(atIndex + 1, dotIndex);
-                    siteName = value.substring(atIndex + 1);
-                } else {
-                    siteName = value.substring(atIndex + 1);
-                }
-                userName = value.substring(0, atIndex)
-            }
-
-            var fitArr = [];
-            // 判断是否全部不符合
-            for (var e in postfixList) {
-                if (siteName) {
-                    if (postfixList[e].indexOf(siteName) == 0) {
-                        fitArr.push(postfixList[e]);
-                    }
-                }
-            }
-
-            if (fitArr.length == 0) {
-                fitArr = postfixList;
-            }
-
-            for (var e in fitArr) {
-                var li = document.createElement('li');
-                li.className = 'emial-items'
-                li.innerText = userName + '@' + fitArr[e];
-                list.push(li);
-            }
-
-            return list;
-        }
-
-        // 将提示内容添加到email-sug-wrapper中
-        function fillTips() {
-            // 获取生成提示框中的提示内容
-            // 将内容添加到email-sug-wrapper中
-
-            tips.innerHTML = '';
-            var list = getTipsList();
-            if (list) {
-                for (var li in list) {
-                    tips.appendChild(list[li])
-                }
+                daySelect.appendChild(option)
             }
         }
+        fillData();
+        fillDay();
 
-        // 控制email-sug-wrapper的显示/隐藏状态
-        function updateTips() {
-            // if 用户输入为空 {
-            //     隐藏提示框
-            // } else {
-            //     显示提示框
-            // }
-            if (getInput()) {
-                show();
-            } else {
-                hide();
-            }
+        Date.prototype.Format = function (fmt) {
+            var week = ['日', '一', '二', '三' ,'四', '五', '六']
+            var o = {
+                "M+": this.getMonth() + 1, //月份 
+                "d+": this.getDate(), //日 
+                "w+": week[this.getDay()], //星期 
+                "h+": this.getHours(), //小时 
+                "m+": this.getMinutes(), //分 
+                "s+": this.getSeconds(), //秒 
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+                "S": this.getMilliseconds() //毫秒 
+            };
+            if (/(y+)/.test(fmt))
+                fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt))
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k])
+                        .length)));
+            return fmt;
         }
 
-        function hide() {
-            // 做具体隐藏提示框的操作
-            tips.style.display = 'none'
+        // 更新数据
+        function updateData() {
+            // 所选时间 注意 月份要 +1
+            var selectDate = new Date(mYear, mMonth - 1, mDay, mHour, mMin, mSec);
+            // 当前时间
+            var now = new Date()
+            // 已经过去?
+            var isGone = selectDate < now;
+            // 时间差的绝对值
+            var delta = Math.abs(selectDate - now);
+
+            var str = '现在距离 ' 
+                        + selectDate.Format('yyyy年MM月dd日星期w hh:mm:ss') 
+                        + (isGone ? ' 已经过去 ' : ' 还有 ')
+                        + ~~(delta / 1000 / 60 / 60 / 24) + '天 '
+                        + ~~(delta / 1000 / 60 / 60 % 24) + '时 '
+                        + ~~(delta / 1000 / 60 % 60) + '分 '
+                        + ~~(delta / 1000 % 60) + '秒';
+            resultWrapper.innerText = str;
+            // 现在距离 2001年1月1日星期X HH:MM:SS 还有 X 天 X 小时 X 分 X 秒
         }
 
-        function show() {
-            // 做具体显示提示框的操作
-            fillTips();
-            tips.style.display = ''
+        updateData();
+        setInterval(function () {
+            updateData();
+        }, 500);
+
+        function selectYear() {
+            var index = yearSelect.selectedIndex;
+            mYear = yearSelect.options[index].value;
+            fillDay();
+        }
+
+        function selectMonth() {
+            var index = monthSelect.selectedIndex;
+            mMonth = monthSelect.options[index].value;
+            fillDay();
+        }
+
+        function selectDay() {
+            var index = daySelect.selectedIndex;
+            mDay = daySelect.options[index].value;
+        }
+
+        function selectHour() {
+            var index = hourSelect.selectedIndex;
+            mHour = hourSelect.options[index].value;
+        }
+
+        function selectMinute() {
+            var index = minuteSelect.selectedIndex;
+            mMin = minuteSelect.options[index].value;
+        }
+
+        function selectSecond() {
+            var index = secondSelect.selectedIndex;
+            mSec = secondSelect.options[index].value;
         }
     </script>
 </body>

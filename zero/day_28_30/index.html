@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>IFE ECMAScript</title>
+    <style>
+        .wrapper {
+            width: 200px;
+        }
+        .wrapper input, .email-sug {
+            width: 100%;
+        }
+        .email-sug {
+            padding-left: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <input id="email-input" type="text" oninput="inputChangedListener()">
+        <ul id="email-sug-wrapper" class="email-sug"></ul>
+    </div>
+    <script>
+        // 邮箱后缀List参考
+        var postfixList = ['163.com', 'gmail.com', '126.com', 'qq.com', '263.net'];
+
+        var input = document.getElementById('email-input');
+        var tips = document.getElementById('email-sug-wrapper');
+
+        tips.addEventListener('click', function(e) {
+            if (e.target && e.target.nodeName.toUpperCase()=="LI") {
+                console.log(e.target.innerHTML);
+            }
+        });
+
+        tips.addEventListener('mouseover', function(e) {
+            if (e.target && e.target.nodeName.toUpperCase()=="LI") {
+                var a = document.getElementsByTagName('li');
+                for (i in a) {
+                    // a[i].style.background = 'transparent';
+                }
+                e.target.style.background = '#f00';
+            }
+        })
+
+        function inputChangedListener(e) {
+            // 获取用户输入，生成提示框中的提示内容，将提示内容添加到email-sug-wrapper中
+            // 控制email-sug-wrapper的显示/隐藏状态
+            updateTips();
+        }
+
+        // 获取用户输入
+        function getInput() {
+            // 拿到input输入框的输入内容trim后返回 
+            var s = input.value;
+            if(!s) return "";
+            s = s.replace(/&/g,"&amp;");
+            s = s.replace(/</g,"&lt;");
+            s = s.replace(/>/g,"&gt;");
+            s = s.replace(/ /g," ");
+            s = s.replace(/'/g,"\'");
+            s = s.replace(/"/g,"&quot;");
+            return s;
+        }
+
+        // 生成提示框中的提示内容
+        function getTipsList() {
+            // 获取用户输入
+            // 遍历postfixList {
+            //     把用户输入和每一个postfix进行结合成为每一个Li
+            // }
+            // 返回生成的提示内容
+            var list = [];
+            var value = getInput();
+            var atIndex = value.indexOf('@');
+            var dotIndex = value.lastIndexOf('.');
+            var siteName;
+            var userName = value;
+            if (atIndex >= 0) {
+                if (dotIndex >= 0 && atIndex < dotIndex) {
+                    // siteName = value.substring(atIndex + 1, dotIndex);
+                    siteName = value.substring(atIndex + 1);
+                } else {
+                    siteName = value.substring(atIndex + 1);
+                }
+                userName = value.substring(0, atIndex)
+            }
+
+            var fitArr = [];
+            // 判断是否全部不符合
+            for (var e in postfixList) {
+                if (siteName) {
+                    if (postfixList[e].indexOf(siteName) == 0) {
+                        fitArr.push(postfixList[e]);
+                    }
+                }
+            }
+
+            if (fitArr.length == 0) {
+                fitArr = postfixList;
+            }
+
+            for (var e in fitArr) {
+                var li = document.createElement('li');
+                li.className = 'emial-items'
+                li.innerText = userName + '@' + fitArr[e];
+                list.push(li);
+            }
+
+            return list;
+        }
+
+        // 将提示内容添加到email-sug-wrapper中
+        function fillTips() {
+            // 获取生成提示框中的提示内容
+            // 将内容添加到email-sug-wrapper中
+
+            tips.innerHTML = '';
+            var list = getTipsList();
+            if (list) {
+                for (var li in list) {
+                    tips.appendChild(list[li])
+                }
+            }
+        }
+
+        // 控制email-sug-wrapper的显示/隐藏状态
+        function updateTips() {
+            // if 用户输入为空 {
+            //     隐藏提示框
+            // } else {
+            //     显示提示框
+            // }
+            if (getInput()) {
+                show();
+            } else {
+                hide();
+            }
+        }
+
+        function hide() {
+            // 做具体隐藏提示框的操作
+            tips.style.display = 'none'
+        }
+
+        function show() {
+            // 做具体显示提示框的操作
+            fillTips();
+            tips.style.display = ''
+        }
+    </script>
+</body>
+
+</html>
