@@ -29,21 +29,70 @@
         var input = document.getElementById('email-input');
         var tips = document.getElementById('email-sug-wrapper');
 
+        window.onload = function() {
+            input.focus();
+        }
+
         tips.addEventListener('click', function(e) {
             if (e.target && e.target.nodeName.toUpperCase()=="LI") {
-                console.log(e.target.innerHTML);
+                // console.log(e.target.innerHTML);
+                input.value = e.target.innerHTML;
+                hide();
+                input.focus();
             }
         });
 
         tips.addEventListener('mouseover', function(e) {
             if (e.target && e.target.nodeName.toUpperCase()=="LI") {
-                var a = document.getElementsByTagName('li');
-                for (i in a) {
-                    // a[i].style.background = 'transparent';
+                var a = document.getElementsByClassName('emial-items');
+                for (var i = 0; i < a.length; i++) {
+                    a[i].style.backgroundColor = '';
                 }
-                e.target.style.background = '#f00';
+                e.target.style.backgroundColor = '#f00';
             }
         })
+
+        input.addEventListener('keydown', function(e) {
+            if (tips.style.display) {
+                console.log('没有展示输入框');
+                return;
+            }
+            if (e.key == 'ArrowDown' || e.key == 'ArrowUp' || e.key == 'Enter') {
+                //
+            } else {
+                if (e.key == 'Escape') {
+                    input.blur();
+                    hide();
+                }
+                return;
+            }
+            var list = document.getElementsByClassName('emial-items');
+            var chooseIndex = 0;
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].style.backgroundColor) {
+
+                    if (e.key == 'ArrowDown') {
+                        console.log("↓");
+                        list[i].style.backgroundColor = '';
+                        if (++i >= list.length) {
+                            i = 0;
+                        }
+                        list[i].style.backgroundColor = '#F00';
+                    } else if (e.key == 'ArrowUp') {
+                        console.log('↑');
+                        list[i].style.backgroundColor = '';
+                        if (--i < 0) {
+                            i = list.length - 1;
+                        }
+                        list[i].style.backgroundColor = '#F00';
+                    } else if (e.key == 'Enter') {
+                        input.value = list[i].innerText;
+                        hide();
+                    }
+                    break;
+                }
+            }
+        });
 
         function inputChangedListener(e) {
             // 获取用户输入，生成提示框中的提示内容，将提示内容添加到email-sug-wrapper中
@@ -54,15 +103,16 @@
         // 获取用户输入
         function getInput() {
             // 拿到input输入框的输入内容trim后返回 
-            var s = input.value;
-            if(!s) return "";
-            s = s.replace(/&/g,"&amp;");
-            s = s.replace(/</g,"&lt;");
-            s = s.replace(/>/g,"&gt;");
-            s = s.replace(/ /g," ");
-            s = s.replace(/'/g,"\'");
-            s = s.replace(/"/g,"&quot;");
-            return s;
+
+            // var s = input.value.trim();
+            // if(!s) return "";
+            // s = s.replace(/&/g,"&amp;");
+            // s = s.replace(/</g,"&lt;");
+            // s = s.replace(/>/g,"&gt;");
+            // s = s.replace(/ /g," ");
+            // s = s.replace(/'/g,"\'");
+            // s = s.replace(/"/g,"&quot;");
+            return input.value.trim();
         }
 
         // 生成提示框中的提示内容
@@ -106,6 +156,9 @@
                 var li = document.createElement('li');
                 li.className = 'emial-items'
                 li.innerText = userName + '@' + fitArr[e];
+                if (e == 0) {
+                    li.style.backgroundColor = '#F00';
+                }
                 list.push(li);
             }
 
