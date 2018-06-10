@@ -5,14 +5,274 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>IFE ECMAScript</title>
     <style>
-        
     </style>
 </head>
 
 <body>
-    
+    <div id="selector-wapper">
+
+        <div id="sale-wapper"></div>
+
+        <div id="product-wapper"></div>
+        <div id="region-wapper"></div>
+
+        <select name="region" id="sel-region">
+        </select>
+
+        <select name="product" id="sel-product">
+        </select>
+    </div>
+
+    <hr>
+
+    <div id="table-wrapper">
+        <table id="table-main" border="1">
+            
+        </table>
+    </div>
+
+    <script type="text/javascript" src="ife31data.js"></script>
+
     <script>
-        
+        var selectorProduct = document.getElementById('sel-product');
+        var selectorRegion = document.getElementById('sel-region');
+        var selectorSale = document.getElementById('sale-wapper');
+        var table = document.getElementById('table-main');
+
+        var checkboxProduct = document.getElementById('product-wapper');
+        var checkboxRegion = document.getElementById('region-wapper');
+
+        checkboxProduct.addEventListener('change', function(e) {
+            if (e.target && e.target.nodeName.toUpperCase()=="INPUT") {
+                if (e.target.value == "ALL") {
+                    chooseAll('product-wapper');
+                } else {
+                    checkChoose('product-wapper', e.target.value);
+                }
+
+                fillTable(getData());
+            }
+        });
+
+        checkboxRegion.addEventListener('change', function(e) {
+            if (e.target && e.target.nodeName.toUpperCase()=="INPUT") {
+                if (e.target.value == "ALL") {
+                    chooseAll('region-wapper');
+                } else {
+                    checkChoose('region-wapper', e.target.value);
+                }
+
+                fillTable(getData());
+            }
+        });
+
+        function getData() {
+            return queryData(getSelectsById('product-wapper'), getSelectsById('region-wapper'));
+        }
+
+        function getSelectsById(targetId) {
+            var result = [];
+            var cb = document.querySelectorAll('#' + targetId + ' input');
+            for (var i = 0; i < cb.length; i++) {
+                if (cb[i].value == 'ALL') {
+                    continue;
+                }
+                if (cb[i].checked === true) {
+                    result.push(cb[i].value);
+                }
+            }
+
+            return result;
+        }
+
+        function chooseAll(targetId, isChecked) {
+            var checkboxs = document.querySelectorAll('#' + targetId + ' input');
+            for (var i = 0; i < checkboxs.length; i++) {
+                checkboxs[i].checked = true;
+            }
+        }
+
+        function checkChoose(targetId, value) {
+            var checkboxs = document.querySelectorAll('#' + targetId + ' input');
+            var length = checkboxs.length - 1;
+            var chooseCount = 0;
+            for (var i = 0; i < length; i++) {
+                if (checkboxs[i].checked === true) {
+                    chooseCount++;
+                }
+            }
+
+            if (chooseCount == 0) {
+                var me;
+                if (value) {
+                    me = document.querySelector('#' + targetId + ' input[value=' + value + ']');
+                } else {
+                    me = document.querySelector('#' + targetId + ' input:first-child');
+                }
+                me.checked = true;
+            } else {
+                var all = document.querySelector('#' + targetId + ' input[value=ALL]');
+                all.checked = (chooseCount == length);
+            }
+        }
+
+        var chooseProduct, chooseRegion;
+
+        selectorProduct.addEventListener('change', function(e) {
+            var index = e.target.selectedIndex;
+            chooseProduct = e.target.options[index].value;
+            fillTable(queryData(chooseProduct, chooseRegion));
+        });
+
+        selectorRegion.addEventListener('change', function(e) {
+            var index = e.target.selectedIndex;
+            chooseRegion = e.target.options[index].value;
+            fillTable(queryData(chooseProduct, chooseRegion));
+            
+        });
+
+        selectorSale.addEventListener('change', function(e) {
+            
+        });
+
+        function fillSelector() {
+            var productDict = {};
+            var regionDict = {};
+            for (var d in sourceData) {
+                productDict[sourceData[d].product] = sourceData[d].product;
+                regionDict[sourceData[d].region] = sourceData[d].region;
+            }
+            productDict['ALL'] = 'ALL';
+            regionDict['ALL'] = 'ALL';
+
+            // 月份
+            // selectorSale.innerHTML = '月份:<br>';
+            // for (var i = 1; i <= 12; i++) {
+            //     var label = document.createElement('label');
+            //     var input = document.createElement('input');
+            //     input.type = 'checkbox'
+            //     input.value = i;
+            //     label.appendChild(input);
+            //     label.innerHTML = label.innerHTML + i + '月<br>';
+            //     // input.innerText = i + '月';
+            //     selectorSale.appendChild(label);
+            // }
+            
+            // 地区
+            selectorRegion.innerHTML = '';
+            for (var i in regionDict) {
+                var option = document.createElement('option');
+                option.value = i;
+                option.innerText = i;
+                selectorRegion.appendChild(option);
+            }
+
+            // 产品
+            selectorProduct.innerHTML = '';
+            for (var i in productDict) {
+                var option = document.createElement('option');
+                option.value = i;
+                option.innerText = i;
+                selectorProduct.appendChild(option);
+            }
+
+            createCheckbox('地区', checkboxRegion, regionDict);
+            createCheckbox('商品', checkboxProduct, productDict);
+
+            checkChoose('product-wapper');
+            checkChoose('region-wapper');
+
+            fillTable(getData());
+        }
+
+        function createCheckbox(name, target, data) {
+            target.innerHTML = name + ':&nbsp;&nbsp;'
+            var firstChecked = true;
+            for (var i in data) {
+                var label = document.createElement('label');
+                var input = document.createElement('input');
+                input.type = 'checkbox'
+                input.value = i;
+                input.name = i;
+                if (firstChecked) {
+                    firstChecked = false;
+                    input.checked = true;
+                }
+                label.appendChild(input);
+                label.innerHTML = label.innerHTML + i + '&nbsp;&nbsp;';
+                // input.innerText = i + '月';
+                target.appendChild(label);
+            }
+        }
+
+        function fillTable(data) {
+            table.innerHTML = '';
+            var productCount = getSelectsById('product-wapper').length;
+            var regionCount = getSelectsById('region-wapper').length;
+
+            // 表头
+            var head = document.createElement('tr');
+            var headProduct = document.createElement('th');
+            headProduct.innerText = '商品';
+            var headRegion =document.createElement('th');
+            headRegion.innerText = '地区';
+
+            if (regionCount == 1 && productCount > 1) {
+                head.appendChild(headRegion);
+                head.appendChild(headProduct);
+            } else {
+                head.appendChild(headProduct);
+                head.appendChild(headRegion);
+            }
+
+            for (var i = 1; i <= 12; i++) {
+                var headSale = document.createElement('th');
+                headSale.innerText = i + '月';
+                head.appendChild(headSale);
+            }
+
+            table.appendChild(head);
+
+            var lastProduct, lastRegion;            
+            for (var d in data) {
+                var row = document.createElement('tr');
+                var product = document.createElement('td');
+                var region =document.createElement('td');
+
+
+                product.innerText = data[d].product;
+                region.innerText = data[d].region;
+
+                product.align = 'center';
+                region.align = 'center';
+
+                if (regionCount == 1 && productCount > 1) {
+                    if (data[d].region != lastRegion) {
+                        region.rowSpan = productCount;
+                        row.appendChild(region);
+                    }
+                    row.appendChild(product);
+                } else {
+                    if (data[d].product != lastProduct) {
+                        product.rowSpan = regionCount;
+                        row.appendChild(product);
+                    }
+                    row.appendChild(region);
+                }
+
+                lastProduct = data[d].product;
+                lastRegion = data[d].region;
+                
+                for (var s in data[d].sale) {
+                    var sale = document.createElement('td');
+                    sale.innerText = data[d].sale[s];
+                    row.appendChild(sale);
+                }
+                table.appendChild(row);
+            }
+        }
+
+        fillSelector();
     </script>
 </body>
 
