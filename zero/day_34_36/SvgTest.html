@@ -11,10 +11,10 @@
 <body>
 
     <div id="svg-wapper">
-        <svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" version="1.1">
+        <svg id="svg" xmlns="http://www.w3.org/2000/svg" width="320" height="320" version="1.1">
 
             <!-- 坐标轴 -->
-            <polyline points="10,10 10,310 310,310" style="fill:white;stroke:black;stroke-width:1" />
+            <!-- <polyline points="10,10 10,310 310,310" style="fill:white;stroke:black;stroke-width:1" /> -->
 
             <!-- 箭头 -->
             <polygon points="8,10 12,10 10,7" style="fill:black;
@@ -43,6 +43,21 @@
         </svg>
     </div>
 
+    <script>
+        var svg = document.getElementById('svg');
+
+        function fillBar() {
+            var axis = document.createElement('polyline');
+            axis.setAttribute('points', '10,10 10,310 310,310');
+            axis.setAttribute('fill', 'white');
+            axis.setAttribute('stroke', 'black');
+            axis.setAttribute('strokeWidth', 1);
+        
+            svg.appendChild(axis);
+        }
+
+        fillBar();
+    </script>
 </body>
 
 </html>

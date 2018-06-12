@@ -179,9 +179,6 @@
             createCheckbox('地区', checkboxRegion, regionDict);
             createCheckbox('商品', checkboxProduct, productDict);
 
-            checkChoose('product-wapper');
-            checkChoose('region-wapper');
-
             fillTable(getData());
         }
 
@@ -196,7 +193,7 @@
                 input.name = i;
                 if (firstChecked) {
                     firstChecked = false;
-                    input.checked = true;
+                    input.setAttribute('checked', 'checked');
                 }
                 label.appendChild(input);
                 label.innerHTML = label.innerHTML + i + '&nbsp;&nbsp;';
