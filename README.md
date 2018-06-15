@@ -33,3 +33,4 @@ For Baidu IFE 2018
 + [第二十八天到第三十天 给爱的人发个邮件吧](zero/day_28_30/index.html)
 + [第三十一到第三十三天：我是精明的小卖家（一）](zero/day_31_33/index.html)
 + [第三十四天到第三十六天：我是精明的小卖家（二）](zero/day_34_36/index.html)
++ [第四十二天到第四十三天：开一家餐厅吧（一）](zero/day_42_43/index.html)
