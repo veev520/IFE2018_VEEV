@@ -9,7 +9,224 @@
 </head>
 
 <body>
-    
+    <div id="selector-wapper">
+
+        <div id="sale-wapper"></div>
+
+        <div id="product-wapper"></div>
+        <div id="region-wapper"></div>
+
+        <select name="region" id="sel-region">
+        </select>
+
+        <select name="product" id="sel-product">
+        </select>
+    </div>
+
+    <hr>
+
+    <div id="table-wrapper">
+        <table id="table-main" border="1">
+            
+        </table>
+    </div>
+
+    <div id="chart-wapper">
+        <svg id="svg" width="400" height="320" version="1.1"></svg>
+        <canvas id="canvas" width="400" height="320"></canvas>
+    </div>
+
+    <script type="text/javascript" src="ife31data.js"></script>
+    <script src="js/table.js"></script>
+    <script src="js/bar.js"></script>
+    <script src="js/line.js"></script>
+
+    <script>
+        var selectorProduct = document.getElementById('sel-product');
+        var selectorRegion = document.getElementById('sel-region');
+        var selectorSale = document.getElementById('sale-wapper');
+        var table = document.getElementById('table-main');
+
+        var checkboxProduct = document.getElementById('product-wapper');
+        var checkboxRegion = document.getElementById('region-wapper');
+
+        checkboxProduct.addEventListener('change', function(e) {
+            if (e.target && e.target.nodeName.toUpperCase()=="INPUT") {
+                if (e.target.value == "ALL") {
+                    chooseAll('product-wapper');
+                } else {
+                    checkChoose('product-wapper', e.target.value);
+                }
+
+                fillTable("table-main", getData());
+            }
+        });
+
+        checkboxRegion.addEventListener('change', function(e) {
+            if (e.target && e.target.nodeName.toUpperCase()=="INPUT") {
+                if (e.target.value == "ALL") {
+                    chooseAll('region-wapper');
+                } else {
+                    checkChoose('region-wapper', e.target.value);
+                }
+
+                fillTable("table-main", getData());
+            }
+        });
+
+        table.addEventListener('mouseover', function(e) {
+            if (e.target && e.target.nodeName.toLowerCase()=="td") {
+                var tds = e.target.parentNode.getElementsByTagName('td');
+                var array = [];
+                for (var i = 2; i < tds.length; i++) {
+                    array.push(tds[i].innerText)
+                }
+
+                if (array) {
+                    drawBar("svg", array);
+                    drawLine('canvas', array);
+                }
+            }
+        });
+
+        function getData() {
+            return queryData(getSelectsById('product-wapper'), getSelectsById('region-wapper'));
+        }
+
+        function getSelectsById(targetId) {
+            var result = [];
+            var cb = document.querySelectorAll('#' + targetId + ' input');
+            for (var i = 0; i < cb.length; i++) {
+                if (cb[i].value == 'ALL') {
+                    continue;
+                }
+                if (cb[i].checked === true) {
+                    result.push(cb[i].value);
+                }
+            }
+
+            return result;
+        }
+
+        function chooseAll(targetId, isChecked) {
+            var checkboxs = document.querySelectorAll('#' + targetId + ' input');
+            for (var i = 0; i < checkboxs.length; i++) {
+                checkboxs[i].checked = true;
+            }
+        }
+
+        function checkChoose(targetId, value) {
+            var checkboxs = document.querySelectorAll('#' + targetId + ' input');
+            var length = checkboxs.length - 1;
+            var chooseCount = 0;
+            for (var i = 0; i < length; i++) {
+                if (checkboxs[i].checked === true) {
+                    chooseCount++;
+                }
+            }
+
+            if (chooseCount == 0) {
+                var me;
+                if (value) {
+                    me = document.querySelector('#' + targetId + ' input[value=' + value + ']');
+                } else {
+                    me = document.querySelector('#' + targetId + ' input:first-child');
+                }
+                me.checked = true;
+            } else {
+                var all = document.querySelector('#' + targetId + ' input[value=ALL]');
+                all.checked = (chooseCount == length);
+            }
+        }
+
+        var chooseProduct, chooseRegion;
+
+        selectorProduct.addEventListener('change', function(e) {
+            var index = e.target.selectedIndex;
+            chooseProduct = e.target.options[index].value;
+            fillTable(queryData(chooseProduct, chooseRegion));
+        });
+
+        selectorRegion.addEventListener('change', function(e) {
+            var index = e.target.selectedIndex;
+            chooseRegion = e.target.options[index].value;
+            fillTable("table-main", queryData(chooseProduct, chooseRegion));
+            
+        });
+
+        selectorSale.addEventListener('change', function(e) {
+            
+        });
+
+        function fillSelector() {
+            var productDict = {};
+            var regionDict = {};
+            for (var d in sourceData) {
+                productDict[sourceData[d].product] = sourceData[d].product;
+                regionDict[sourceData[d].region] = sourceData[d].region;
+            }
+            productDict['ALL'] = 'ALL';
+            regionDict['ALL'] = 'ALL';
+
+            // 月份
+            // selectorSale.innerHTML = '月份:<br>';
+            // for (var i = 1; i <= 12; i++) {
+            //     var label = document.createElement('label');
+            //     var input = document.createElement('input');
+            //     input.type = 'checkbox'
+            //     input.value = i;
+            //     label.appendChild(input);
+            //     label.innerHTML = label.innerHTML + i + '月<br>';
+            //     // input.innerText = i + '月';
+            //     selectorSale.appendChild(label);
+            // }
+            
+            // 地区
+            selectorRegion.innerHTML = '';
+            for (var i in regionDict) {
+                var option = document.createElement('option');
+                option.value = i;
+                option.innerText = i;
+                selectorRegion.appendChild(option);
+            }
+
+            // 产品
+            selectorProduct.innerHTML = '';
+            for (var i in productDict) {
+                var option = document.createElement('option');
+                option.value = i;
+                option.innerText = i;
+                selectorProduct.appendChild(option);
+            }
+
+            createCheckbox('地区', checkboxRegion, regionDict);
+            createCheckbox('商品', checkboxProduct, productDict);
+
+            fillTable("table-main", getData());
+        }
+
+        function createCheckbox(name, target, data) {
+            target.innerHTML = name + ':&nbsp;&nbsp;'
+            var firstChecked = true;
+            for (var i in data) {
+                var label = document.createElement('label');
+                var input = document.createElement('input');
+                input.type = 'checkbox'
+                input.value = i;
+                input.name = i;
+                if (firstChecked) {
+                    firstChecked = false;
+                    input.setAttribute('checked', 'checked');
+                }
+                label.appendChild(input);
+                label.innerHTML = label.innerHTML + i + '&nbsp;&nbsp;';
+                // input.innerText = i + '月';
+                target.appendChild(label);
+            }
+        }
+
+        fillSelector();
+    </script>
 </body>
 
 </html>
